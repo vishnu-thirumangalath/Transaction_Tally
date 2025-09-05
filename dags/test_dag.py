@@ -15,3 +15,10 @@ PYSPARK_PACKAGES = (
     "org.mongodb.spark:mongo-spark-connector_2.12:10.2.0,"
     "org.apache.hudi:hudi-spark3.3-bundle_2.12:0.13.1"
 )
+
+with DAG(
+    dag_id="test_dag",
+    schedule_interval=None,
+    start_date=None,
+    catchup=False,
+) as dag:
