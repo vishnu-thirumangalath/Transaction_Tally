@@ -1,14 +1,6 @@
 from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
-from airflow.providers.cncf.kubernetes.secret import Secret
 from airflow.utils.dates import days_ago
-
-# Secret: inject all keys from "flask-secrets" into env
-env_secret = Secret(
-    deploy_type="env",          # inject as environment vars
-    deploy_target=None,         # None = all keys become env vars
-    secret="flask-secrets"      # 👈 your secret name in namespace test
-)
 
 with DAG(
     dag_id="transaction_tally_dag",
@@ -28,7 +20,7 @@ with DAG(
         do_xcom_push=False,
         is_delete_operator_pod=True,
         labels={"app": "transaction-tally"},
-        secrets=[env_secret],   # 👈 load env from flask-secrets
+        env_from=[{"secretRef": {"name": "flask-secrets"}}],  # 👈 works across versions
     )
 
     flask_sensor = KubernetesPodOperator(
@@ -37,11 +29,9 @@ with DAG(
         namespace="test",
         image="alpine:3.18",
         cmds=["sh", "-c"],
-        arguments=[
-            "echo DB=$POSTGRES_DB && echo KAFKA=$KAFKA_TOPIC"
-        ],
+        arguments=["echo DB=$POSTGRES_DB && echo KAFKA=$KAFKA_TOPIC"],
         get_logs=True,
-        secrets=[env_secret],   # 👈 also inject here
+        env_from=[{"secretRef": {"name": "flask-secrets"}}],  # 👈 same here
     )
 
     [run_python_app, flask_sensor]
