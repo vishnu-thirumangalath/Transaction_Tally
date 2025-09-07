@@ -5,7 +5,7 @@ from airflow.utils.dates import days_ago
 import subprocess
 
 # Config
-NAMESPACE = "test"  # 👈 change or parametrize
+NAMESPACE = "spark"  # 👈 change or parametrize
 # SECRET_NAME = "flask-secrets"
 SECRET_FILE = "/home/devopsadmin/workspace/helm/postgres/env_secrets.yaml"
 
