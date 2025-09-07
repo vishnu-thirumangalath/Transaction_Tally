@@ -18,7 +18,7 @@ with DAG(
         cmds=["python", "run.py"],
         get_logs=True,
         do_xcom_push=False,
-        is_delete_operator_pod=True,
+        is_delete_operator_pod=False,
         labels={"app": "transaction-tally"},
         env_from=[{"secretRef": {"name": "flask-secrets"}}],  # 👈 works across versions
     )
