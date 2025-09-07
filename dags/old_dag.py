@@ -77,4 +77,4 @@ with DAG(
     )
 
     # DAG flow (sequential)
-    [run_python_app,flask_sensor]
+    [run_python_app_old,flask_sensor_old]
