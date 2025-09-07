@@ -13,7 +13,7 @@ with DAG(
 
     # 1. Run Flask app pod (kept alive, task ends immediately after creation)
     run_python_app_old = KubernetesPodOperator(
-        task_id="run_transaction_tally",
+        task_id="run_transaction_tally_old",
         name="transaction-tally",
         namespace="test",
         service_account_name="dagsvc",
