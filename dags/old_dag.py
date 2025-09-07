@@ -5,7 +5,7 @@ from airflow.kubernetes.secret import Secret
 
 # DAG definition
 with DAG(
-    dag_id="transaction_tally_dag",
+    dag_id="transaction_tally_dag_old",
     schedule_interval=None,
     start_date=days_ago(1),
     catchup=False,
