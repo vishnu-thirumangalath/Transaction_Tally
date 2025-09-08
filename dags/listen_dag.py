@@ -34,4 +34,4 @@ with DAG(
         env_from=[{"secretRef": {"name": "flask-secrets"}}],  # 👈 same here
     )
 
-    [run_python_app, flask_sensor]
+    flask_sensor << run_python_app 
