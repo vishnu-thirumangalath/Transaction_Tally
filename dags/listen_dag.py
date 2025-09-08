@@ -14,6 +14,7 @@ with DAG(
         name="transaction-tally",
         namespace="test",
         service_account_name="dagsvc",
+        labels={"app" : "transaction-tally", "type" : "test"},
         image="ghcr.io/vishnu-thirumangalath/docker-images/transaction-tally:latest",
         cmds=["python", "run.py"],
         get_logs=True,
