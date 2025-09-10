@@ -22,6 +22,7 @@ with DAG(
         is_delete_operator_pod=False,
         labels={"app": "transaction-tally"},
         env_from=[{"secretRef": {"name": "flask-secrets"}}],  # 👈 works across versions
+        image_pull_policy="Always",
     )
 
     flask_sensor = KubernetesPodOperator(
