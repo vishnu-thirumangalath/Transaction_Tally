@@ -3,13 +3,20 @@ FROM python:3.11-slim-bookworm
 # Install Java + procps
 RUN apt-get update && apt-get install -y openjdk-17-jdk procps && rm -rf /var/lib/apt/lists/*
 
-# Set JAVA_HOME to Java 17
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
+RUN arch=$(uname -m) && \
+    if [ "$arch" = "aarch64" ]; then \
+        echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-arm64" >> /etc/environment && \
+        ln -s /usr/lib/jvm/java-17-openjdk-arm64 /usr/lib/jvm/default-java; \
+    else \
+        echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> /etc/environment && \
+        ln -s /usr/lib/jvm/java-17-openjdk-amd64 /usr/lib/jvm/default-java; \
+    fi
 
-# Persist in ENV
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
+# Set JAVA_HOME & PATH globally
+ENV JAVA_HOME=/usr/lib/jvm/default-java
+ENV PATH="$JAVA_HOME/bin:${PATH}"
+
+
 
 # Install dependencies
 COPY requirements.txt .
