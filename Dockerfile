@@ -3,13 +3,11 @@ FROM python:3.11-slim-bookworm
 # Install Java + procps
 RUN apt-get update && apt-get install -y openjdk-17-jdk procps && rm -rf /var/lib/apt/lists/*
 
-RUN arch=$(uname -m) && \
-    if [ "$arch" = "aarch64" ]; then \
-        echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-arm64" >> /etc/environment && \
-        ln -s /usr/lib/jvm/java-17-openjdk-arm64 /usr/lib/jvm/default-java; \
+ARG TARGETPLATFORM
+RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+      ln -s /usr/lib/jvm/java-17-openjdk-arm64 /usr/lib/jvm/default-java; \
     else \
-        echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> /etc/environment && \
-        ln -s /usr/lib/jvm/java-17-openjdk-amd64 /usr/lib/jvm/default-java; \
+      ln -s /usr/lib/jvm/java-17-openjdk-amd64 /usr/lib/jvm/default-java; \
     fi
 
 # Set JAVA_HOME & PATH globally
