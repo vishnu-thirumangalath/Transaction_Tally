@@ -19,6 +19,7 @@ def start_spark_stream():
         .option("subscribe", KAFKA_TOPIC)
         .option("startingOffsets", "latest")
         .option("maxOffsetsPerTrigger", 10000)
+        .option("kafka.security.protocol", "PLAINTEXT")
         .load()
     )
 
