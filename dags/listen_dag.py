@@ -21,7 +21,7 @@ with DAG(
         do_xcom_push=False,
         is_delete_operator_pod=False,
         labels={"app": "transaction-tally"},
-        env=[{"name": "PYTHONUNBUFFERED", "value": "1"}],
+        env_vars={"PYTHONUNBUFFERED": "1"},
         env_from=[{"secretRef": {"name": "flask-secrets"}}],
         image_pull_policy="Always",
     )
