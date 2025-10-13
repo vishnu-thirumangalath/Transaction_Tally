@@ -16,12 +16,13 @@ with DAG(
         service_account_name="dagsvc",
         # labels={"app" : "transaction-tally", "type" : "test"},
         image="ghcr.io/vishnu-thirumangalath/docker-images/transaction-tally:latest",
-        cmds=["python", "run.py"],
+        cmds=["python", "-u", "run.py"],
         get_logs=True,
         do_xcom_push=False,
         is_delete_operator_pod=False,
         labels={"app": "transaction-tally"},
-        env_from=[{"secretRef": {"name": "flask-secrets"}}],  # 👈 works across versions
+        env=[{"name": "PYTHONUNBUFFERED", "value": "1"}],
+        env_from=[{"secretRef": {"name": "flask-secrets"}}],
         image_pull_policy="Always",
     )
 
@@ -33,7 +34,7 @@ with DAG(
         cmds=["sh", "-c"],
         arguments=["echo DB=$POSTGRES_DB && echo KAFKA=$KAFKA_TOPIC"],
         get_logs=True,
-        env_from=[{"secretRef": {"name": "flask-secrets"}}],  # 👈 same here
+        env_from=[{"secretRef": {"name": "flask-secrets"}}],
     )
 
     flask_sensor >> run_python_app 
